@@ -1,11 +1,59 @@
+# encoding: utf-8
+from pythonds.basic.stack import Stack
+
+
 class check():
-    def become_list_v2(words_1):
-        flag=1
+    def legal(words_1):
+        flag = 1
         for key in words_1:
             if not key in '+-*/()0123456789{}[]':
-                flag=0
-                break;
+                flag = 0
+                break
         return flag
+
+    def isBalance(list):
+        """栈的应用,检查括号是否平衡"""
+        result_stack = Stack()
+        for i in list:
+            if i in ['{', '[', '(']:
+                result_stack.push(i)
+            elif i in ['}', ']', ')']:  # 遇到结束括号的情况
+                if result_stack.isEmpty():  # 如果当前栈为空, 不匹配,返回False
+                    return False
+                chFromStack = result_stack.pop()
+                if not ((chFromStack == '{' and i == '}')
+                        or (chFromStack == '[' and i == ']')
+                        or (chFromStack == '(' and i == ')')):
+                    # 如果不满足匹配条件, 则返回False
+                    return False
+        # 遍历结束后, 如果结果栈为空, 则代表括号匹配, 栈不为空, 括号不匹配
+        return result_stack.isEmpty()
+
+    def only_one(front, middile, last, current):  # 判断是否填写数据并清空无用list
+        """
+        :front_text: list
+        :middile_text: list
+        :last_text: list
+        """
+        if current == 0:
+            if len(front):
+                middile.clear()
+                last.clear()
+            else:
+                return False
+        elif current == 1:
+            if len(middile):
+                front.clear()
+                last.clear()
+            else:
+                return False
+        else:
+            if len(last):
+                front.clear()
+                middile.clear()
+            else:
+                return False
+        return True
 
 
 class calculate():
@@ -90,4 +138,3 @@ class calculate():
                 del lista[0]
                 lista.insert(0, c/b)
         return lista[0]  # 栈中最后的元素就是结果
-    

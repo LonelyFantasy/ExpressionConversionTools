@@ -1,3 +1,4 @@
+# 图标base64转码
 import base64
 with open("icon.py", "a") as f:
     f.write('class Icon(object):\n')

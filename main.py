@@ -58,6 +58,12 @@ choosen_label = Label(app, text='转换式子选择👉', font=("微软雅黑", 
     .grid(row=0, column=0, sticky=W)
 choosen_label = Label(app, text='👈转换式子选择', font=("微软雅黑", 11)) \
     .grid(row=0, column=0, sticky=E)
+yangli1 = Label(app, text='样例：+ + 1 23 4', font=("微软雅黑", 11)) \
+    .grid(row=1, column=0, sticky=E)
+middile_label = Label(app, text='样例：( 1 + 23 ) + 4', font=("微软雅黑", 11)) \
+    .grid(row=3, column=0, sticky=E)
+last_label = Label(app, text='样例：1 23 + 4 +', font=("微软雅黑", 11)) \
+    .grid(row=5, column=0, sticky=E)
 
 # -----输入框控件----- #
 front_text = scrolledtext.ScrolledText(
@@ -73,6 +79,10 @@ middile_text.grid(row=4, column=0)
 last_text.grid(row=6, column=0)
 result_text.grid(row=8, column=0)
 
+
+front_text.insert(END, "+ + 1 23 4")
+middile_text.insert(END, "( 1 + 23 ) + 4")
+last_text.insert(END, "1 23 + 4 +")
 # -----Button控件----- #
 Button(app, text='一键转换', font=("微软雅黑", 12), width=10, command=lambda: schecude()) \
     .grid(row=9, column=0, sticky=W + E, padx=5, pady=3)
@@ -88,7 +98,8 @@ Button(app, text='填写帮助', font=("微软雅黑", 12), width=10,
 # -----版权显示----- #
 banquan1 = tkinter.Label(app, text='©2021 Powered By 黎柄材小组', font=("微软雅黑", 11))\
     .grid(row=11, column=0, sticky=W)
-banquan2 = tkinter.Label(app, text='👉Design By LonelyFantasy', font=("微软雅黑", 11, UNDERLINE))
+banquan2 = tkinter.Label(
+    app, text='👉Design By LonelyFantasy', font=("微软雅黑", 11, UNDERLINE))
 banquan2.grid(row=11, column=0, sticky=E)
 banquan2.bind("<Button-1>", ui.open_url)
 # ---------------END--------------- #
@@ -96,13 +107,14 @@ banquan2.bind("<Button-1>", ui.open_url)
 # ---------------核心流程函数（勿动）--------------- #
 
 # -----输出结果----- #
+
+
 def output_data(result):
     global front, middile, last
     # -----框初始化----- #
     front_text.delete(1.0, END)
     middile_text.delete(1.0, END)
     last_text.delete(1.0, END)
-
     front_text.insert(END, " ".join(str(l) for l in front))
     middile_text.insert(END, " ".join(str(l) for l in middile))
     last_text.insert(END, " ".join(str(l) for l in last))
@@ -130,8 +142,6 @@ def schecude():
     front.pop()
     middile.pop()
     last.pop()
-    # Debug
-    print(len(front), len(middile), len(last))
     current_number = number_chosen.current()
     if not func.Check.only_one(front, middile, last, current_number):
         ui.show_warning('你所选的' + number_chosen.get() + '未填写式子\n请重新输入')
@@ -143,25 +153,29 @@ def schecude():
             return
         front = copy.deepcopy(func.Pretreatment.trans_to_num(front))  # 格式化处理
         middile = copy.deepcopy(func.calculate.f_to_m(front))  # 转中缀做平衡判断
-        print(front)
+        print('转完到middile检查：:', middile)  # debug
         if not func.Check.is_balance(middile):  # 合法性判断
             ui.show_wrong(number_chosen.get())
             return
         last = copy.deepcopy(func.calculate.m_to_l(middile))
-        print(len(front), len(middile), len(last))
+        print('三缀list存储内容检查：', front, middile, last)  # debug
+        print('长度检查：', len(front), len(middile), len(last))  # debug
         output_data(func.calculate.get_value(last))
     # -----中缀流程----- #
     elif current_number == 1:
         if not func.Check.symbol(middile):  # 符号判断
             ui.show_wrong(number_chosen.get())
             return
-        middile = copy.deepcopy(func.Pretreatment.trans_to_num(middile))  # 格式化处理
+        middile = copy.deepcopy(
+            func.Pretreatment.trans_to_num(middile))  # 格式化处理
+        print('转完到middile检查：:', middile)  # debug
         if not func.Check.is_balance(middile):  # 合法性判断
             ui.show_wrong(number_chosen.get())
             return
         front = copy.deepcopy(func.calculate.m_to_f(middile))
         last = copy.deepcopy(func.calculate.m_to_l(middile))
-        print(last)
+        print('三缀list存储内容检查：', front, middile, last)  # debug
+        print('长度检查：', len(front), len(middile), len(last))  # debug
         output_data(func.calculate.get_value(last))
     # -----后缀流程----- #
     elif current_number == 2:
@@ -170,12 +184,15 @@ def schecude():
             return
         last = copy.deepcopy(func.Pretreatment.trans_to_num(last))  # 格式化处理
         middile = copy.deepcopy(func.calculate.l_to_m(last))  # 转中缀做平衡判断
+        print('转完到middile检查：:', middile)  # debug
         if not func.Check.is_balance(middile):  # 合法性判断
             ui.show_wrong(number_chosen.get())
             return
         front = copy.deepcopy(func.calculate.m_to_f(middile))
-        print(len(front), len(middile), len(last))
+        print('三缀list存储内容检查：', front, middile, last)  # debug
+        print('长度检查：', len(front), len(middile), len(last))  # debug
         output_data(func.calculate.get_value(last))
 # ---------------核心流程函数END--------------- #
+
 
 app.mainloop()

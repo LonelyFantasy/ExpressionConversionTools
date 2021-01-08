@@ -168,7 +168,6 @@ class Check:
         """
         :cur_list: list
         """
-        print(cur_list)
         for key in cur_list:
             if not key in '+-*/()0123456789 ':
                 return False
@@ -216,6 +215,7 @@ class Check:
             else:
                 return False
         return True
+    
 
 
 class calculate():
@@ -225,8 +225,10 @@ class calculate():
         :cur_list: list
         """
         temp = []
+        temp2 = []
         s = Stack()
         list = [str(i) for i in cur_list]
+        print (list)
         for par in list:
             if par in "+-*/":  # 遇到运算符则入栈
                 s.push(par)
@@ -247,11 +249,17 @@ class calculate():
                     s.push(str(par))  # 算式入栈
         list1 = (str(s.pop()))  # 用列表存新的算式
         for i in list1:
-            if i not in '+-*/()':
-                temp.append(int(i))
+            if i in '+-*/()':
+                if len(temp2) == 0:
+                    temp.append(i)
+                else:
+                    temp.append(int(''.join(temp2)))
+                    temp2.clear()
+                    temp.append(i)
             else:
-                temp.append(i)
-        print(temp)
+                temp2.append(i)
+        if len(temp2) != 0:
+            temp.append(int(''.join(temp2)))
         return temp  # 返回最终算式
 
     def m_to_l(expression):

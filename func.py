@@ -1,6 +1,7 @@
 # encoding: utf-8
 from pythonds.basic.stack import Stack
 import copy
+import ui
 
 
 class Node:
@@ -162,6 +163,25 @@ class Pretreatment:  # 内容识别处理
                 temp2.clear()
         return result
 
+    def middile(cur_list):  # 中缀表达式无空格输入处理
+        temp = []
+        temp2 = []
+        for i in cur_list:
+            if i is ' ':
+                continue
+            if i in '+-*/()':
+                if(len(temp2)) == 0:
+                    temp.append(i)
+                else:
+                    temp.append(int(''.join(temp2)))
+                    temp2.clear()
+                    temp.append(i)
+            else:
+                temp2.append(i)
+        if len(temp2) != 0:
+            temp.append(int(''.join(temp2)))
+        return temp  # 返回最终算式
+
 
 class Check:
     def symbol(cur_list):
@@ -215,7 +235,22 @@ class Check:
             else:
                 return False
         return True
-    
+
+    def num_symbol(list):
+        cur_list = [str(i) for i in list]
+        m = n = 0
+        for i in cur_list:
+            if i in '()':
+                continue
+            if i in '+-*/':
+                m = m + 1
+            else:
+                n = n + 1
+        print(n, m)
+        cur_list.clear()
+        if n - m != 1:
+            return False
+        return True
 
 
 class calculate():
@@ -228,7 +263,7 @@ class calculate():
         temp2 = []
         s = Stack()
         list = [str(i) for i in cur_list]
-        print (list)
+        print(list)
         for par in list:
             if par in "+-*/":  # 遇到运算符则入栈
                 s.push(par)
@@ -319,7 +354,7 @@ class calculate():
         Tree.delbrackets(listb)
         return listb
 
-    def m_to_f(cur_list):  # 中转前缀
+    def m_to_f(cur_list):
         list = copy.deepcopy(cur_list)
         list.reverse()
         lista = []  # 建立空的数字栈
@@ -327,7 +362,6 @@ class calculate():
         for a in list:
             if isinstance(a, int):  # 遇见数字直接压入数字栈
                 lista.insert(0, a)
-
             elif a == '(':  # 遇见'('遍历符号栈把符号栈中元素取出放入数字栈中直到遇见‘）’，然后把‘）‘从符号栈中删除
                 while listb[0] != ')':
                     lista.insert(0, listb[0])
@@ -344,14 +378,13 @@ class calculate():
                     # 如果符号优先级等于符号栈栈顶元素，直接入栈
                     elif (a == '-' or a == '+') and (listb[0] == '-' or listb[0] == '+'):
                         listb.insert(0, a)
-                        # 如果符号优先级小于符号栈栈顶元素，则把元素取出放入数字栈直到优先级相等或者符号栈变为空
+                    # 如果符号优先级小于符号栈栈顶元素，则把元素取出放入数字栈直到优先级相等或者符号栈变为空
                     elif (a == '-' or a == '+') and (listb[0] == '*' or listb[0] == '/'):
                         for c in listb:
-                            if c == '*' or c == '/':
+                            if listb[0] == '*' or listb[0] == '/':
                                 del listb[0]
                                 lista.insert(0, c)
-                            elif c == '+' or c == '-':
-                                listb.insert(0, a)
+                            elif listb[0] == '+' or listb[0] == '-' or listb[0] == ')':
                                 break
                         listb.insert(0, a)
         for c in listb:  # 把剩余符号栈中元素取出放入数字栈

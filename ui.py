@@ -9,7 +9,7 @@ class Window():
     def show_help():
         tkinter.messagebox.showinfo(
             "使用帮助",
-            "Version: Bata1.0\n\n"
+            "Version: Release 1.0\n\n"
             "选择需要转换的前中后缀\n"
             "并在相应的框内输入式子\n"
             "完成后点击一键转换\n")

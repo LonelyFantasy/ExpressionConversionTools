@@ -29,7 +29,6 @@ app.iconbitmap('tmp.ico')
 os.remove('tmp.ico')
 
 
-
 # ---------------界面部分--------------- #
 # -----下拉表选择----- #
 number = tkinter.StringVar()
@@ -198,6 +197,7 @@ def schecude():
         output_data(func.calculate.get_value(last))
 # ---------------核心流程函数END--------------- #
 
+# ----------窗口置中---------- #
 app.update()
 sw = app.winfo_screenwidth()#得到屏幕宽度
 sh = app.winfo_screenheight()#得到屏幕高度
